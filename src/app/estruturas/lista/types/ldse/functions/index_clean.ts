@@ -3,7 +3,7 @@ export { useInserirFim, InserirFimInfo } from "./inserir_fim";
 export { useRemoverInicio, RemoverInicioInfo } from "./remover_inicio";
 export { useInserirInicio, InserirInicioInfo } from "./inserir_inicio";
 export { useBuscar, BuscarInfo } from "./buscar";
-export { useShow, ShowInfo } from "./show";
+export { useShow, ShowInfo } from "./show.tsx";
 export { useRemoverElemento, RemoverElementoInfo } from "./remover_elemento";
 export { useInserirApos, InserirAposInfo } from "./inserir_apos";
 export { useInserirAntes, InserirAntesInfo } from "./inserir_antes";

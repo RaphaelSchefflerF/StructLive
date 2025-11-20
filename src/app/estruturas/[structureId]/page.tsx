@@ -29,14 +29,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import ListActivity from "@/app/estruturas/lista/components/list-activity";
-import ListVisualization from "@/app/estruturas/lista/components/list-visualization";
-import ListTheory from "@/app/estruturas/lista/components/list-theory";
-import ListChallenge from "./components/list-challenge";
+import { masterRegistry } from "@/lib/structure-registries";
 
-function ListPageContent() {
+import { useAppContext } from "@/contexts/AppContext";
+import StructureContentRenderer from "./components/structure-content-renderer";
+
+function StructurePageContent({ params }: { params: { structureId: string } }) {
   const searchParams = useSearchParams();
-  const [tipoLista, setTipoLista] = useState("ldse");
+  const { getStructureById } = useAppContext();
+  const structure = getStructureById(params.structureId);
+
+  // Dynamic Registry Logic
+  const currentRegistry = masterRegistry[params.structureId as keyof typeof masterRegistry];
+  const options = currentRegistry 
+    ? Object.values(currentRegistry).map(item => ({
+        id: item.id,
+        name: item.name,
+        disabled: item.disabled
+      }))
+    : [];
+
+  const [tipoLista, setTipoLista] = useState(options.length > 0 ? options[0].id : "");
 
   // Lê o parâmetro 'tab' da URL, padrão é 'conteudo'
   const tabFromUrl = searchParams.get("tab") || "conteudo";
@@ -49,6 +62,14 @@ function ListPageContent() {
       setActiveTab(tab);
     }
   }, [searchParams]);
+
+  if (!structure) {
+    return (
+      <div className="flex items-center justify-center h-screen text-2xl text-muted-foreground">
+        Estrutura de dados não encontrada.
+      </div>
+    );
+  }
 
   return (
     <>
@@ -76,8 +97,8 @@ function ListPageContent() {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbPage className="flex items-center gap-1">
-                  <List className="h-3.5 w-3.5" />
-                  <span>Listas</span>
+                  {structure.icon && <span className="h-3.5 w-3.5 flex items-center justify-center text-lg">{structure.icon}</span>}
+                  <span>{structure.title}</span>
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -88,43 +109,35 @@ function ListPageContent() {
       <div className="py-10 px-4 sm:px-10">
         <div className="flex flex-col gap-2">
           <h1 className="text-4xl font-bold tracking-tight flex items-center gap-2">
-            <List className="h-8 w-8" />
-            Listas
+            {structure.icon && <span className="text-4xl">{structure.icon}</span>}
+            {structure.title}
           </h1>
           <p className="text-xl text-muted-foreground">
-            Estrutura de dados para armazenar e manipular coleções de elementos
+            {structure.description}
           </p>
         </div>
-        {/* Select de tipos de lista */}
-        <div className="mt-6 mb-4 flex items-center gap-4">
-          <span className="text-base text-muted-foreground">
-            Selecione qual estrutura você deseja:
-          </span>
-          <Select value={tipoLista} onValueChange={setTipoLista}>
-            <SelectTrigger className="w-[330px]">
-              <SelectValue placeholder="Selecione o tipo de lista" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="les" disabled>
-                  Lista Estática Sequencial
-                </SelectItem>
-                <SelectItem value="lee" disabled>
-                  Lista Estática Encadeada
-                </SelectItem>
-                <SelectItem value="ldse">
-                  Lista Dinâmica Simplesmente Encadeada
-                </SelectItem>
-                <SelectItem value="ldde" disabled>
-                  Lista Dinâmica Duplamente Encadeada
-                </SelectItem>
-                <SelectItem value="lc" disabled>
-                  Lista Circular
-                </SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
+        {/* Dynamic Select for Types */}
+        {options.length > 0 && (
+          <div className="mt-6 mb-4 flex items-center gap-4">
+            <span className="text-base text-muted-foreground">
+              Selecione qual estrutura você deseja:
+            </span>
+            <Select value={tipoLista} onValueChange={setTipoLista}>
+              <SelectTrigger className="w-[330px]">
+                <SelectValue placeholder="Selecione o tipo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  {options.map((option) => (
+                    <SelectItem key={option.id} value={option.id} disabled={option.disabled}>
+                      {option.name}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
         <Separator className="my-6" />
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -174,14 +187,14 @@ function ListPageContent() {
           {/* Conteudo - Explicação teórica */}
           <TabsContent value="conteudo">
             <div className="border rounded-lg p-6 bg-card">
-              <ListTheory tipo={tipoLista} />
+              <StructureContentRenderer structureId={params.structureId as keyof typeof masterRegistry} listType={tipoLista} contentType="theory" />
             </div>
           </TabsContent>
 
           {/* Visualização interativa */}
           <TabsContent value="visualization">
             <div className="border rounded-lg bg-card">
-              <ListVisualization tipo={tipoLista} />
+              <StructureContentRenderer structureId={params.structureId as keyof typeof masterRegistry} listType={tipoLista} contentType="visualization" />
             </div>
           </TabsContent>
 
@@ -194,7 +207,7 @@ function ListPageContent() {
               <p className="text-muted-foreground mb-6">
                 Complete os desafios para testar seu conhecimento sobre listas.
               </p>
-              <ListActivity tipo={tipoLista} />
+              <StructureContentRenderer structureId={params.structureId as keyof typeof masterRegistry} listType={tipoLista} contentType="activity" />
             </div>
           </TabsContent>
 
@@ -207,7 +220,7 @@ function ListPageContent() {
               <p className="text-muted-foreground mb-6">
                 Enfrente os desafios para aprimorar suas habilidades em listas.
               </p>
-              <ListChallenge tipo={tipoLista} />
+              <StructureContentRenderer structureId={params.structureId as keyof typeof masterRegistry} listType={tipoLista} contentType="challenge" />
             </div>
           </TabsContent>
         </Tabs>
@@ -216,7 +229,7 @@ function ListPageContent() {
   );
 }
 
-export default function ListPage() {
+export default function StructurePage({ params }: { params: { structureId: string } }) {
   const { status } = useSession();
   const router = useRouter();
 
@@ -233,7 +246,7 @@ export default function ListPage() {
       <AppSidebar />
       <SidebarInset>
         <Suspense fallback={<div>Carregando...</div>}>
-          <ListPageContent />
+          <StructurePageContent params={params} />
         </Suspense>
       </SidebarInset>
     </SidebarProvider>

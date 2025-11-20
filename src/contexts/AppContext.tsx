@@ -38,19 +38,7 @@ interface AppContextType {
   getStructureById: (id: string) => DataStructure | undefined;
 }
 
-// Lista de estruturas de dados
-const dataStructures: DataStructure[] = [
-  {
-    id: "lista",
-    title: "Listas",
-    created: true,
-    description:
-      "Estrutura de dados que organiza elementos de forma sequencial com operações de inserção e remoção flexíveis.",
-    icon: "📝",
-    complexity: "Básico",
-    lessons: 5,
-  },
-];
+import { dataStructures } from "@/config/structures.config";
 
 // Criando o contexto com valores iniciais
 const AppContext = createContext<AppContextType | undefined>(undefined);
