@@ -1,4 +1,9 @@
-# 🧪 Como Criar um Novo Módulo (Exemplo: Payments ou HelloModule)
+# 🧪 Como Criar um Novo Módulo (Processo Manual)
+
+> [!NOTE]
+> **Para a maioria dos casos, use os scripts de automação!**  
+> Veja [Criando Módulos](modules.md) e [Scripts de Automação](scripts.md) para o método recomendado.  
+> Este guia descreve o processo manual, útil para entender a estrutura ou casos especiais.
 
 Objetivo: adicionar um novo módulo educacional (ex: “Fila”, “Árvore”) ou um módulo funcional (ex: “Payments”).
 

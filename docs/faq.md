@@ -6,7 +6,7 @@ Verifique GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET e se a redirect URL está igua
 
 ## 2. A página /home redireciona para /login.
 
-Sua sessão não está autenticada. Faça login na raiz ou ajuste NEXTAUTH_URL.
+Sua sessão não está autenticada. Faça login ou ajuste NEXTAUTH_URL.
 
 ## 3. Atividades não carregam.
 
@@ -24,7 +24,7 @@ Falta no .env ou precisa reiniciar dev depois de alterar.
 
 ## 6. Como adiciono uma nova estrutura?
 
-Siga docs/how-to-add-a-module.md.
+Use os scripts de automação! Veja [docs/modules.md](modules.md) e [docs/scripts.md](scripts.md). Para processo manual: [docs/how-to-add-a-module.md](how-to-add-a-module.md).
 
 ## 7. Posso usar Yarn ou pnpm?
 
@@ -43,7 +43,7 @@ npm run dev
 
 ## 10. Quero contribuir. Checklist?
 
-Ver docs/how-to-add-a-module.md (seção Checklist de PR).
+Ver [docs/contributing.md](contributing.md) para guia completo de contribuição.
 
 ## 11. Como ativo produção?
 
@@ -86,3 +86,21 @@ Adicionar ESLint + Prettier (se não existir) e configurar script pre-commit.
 ## 20. Quero adicionar validação de entrada.
 
 Adicionar Zod e validar no route.ts antes de acessar DB.
+
+## 21. Como usar os scripts de automação?
+
+Para criar um módulo:
+```bash
+npx tsx scripts/create-module.ts "Nome do Módulo" "Tipo 1" "Tipo 2"
+```
+
+Para adicionar um tipo:
+```bash
+npx tsx scripts/create-type.ts "Módulo Existente" "Novo Tipo"
+```
+
+Veja [docs/modules.md](modules.md) para detalhes.
+
+## 22. O projeto funciona com Next.js 15?
+
+Sim! O projeto usa Next.js 15.2.1 com App Router e React 19.

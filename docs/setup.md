@@ -23,7 +23,7 @@ docker --version   # opcional
 
 ```bash
 git clone <url-do-repositorio>
-cd StructLive
+cd next-structlive
 ```
 
 ## 📦 Instalar Dependências
@@ -34,11 +34,10 @@ npm install
 
 ## 🔐 Arquivo .env
 
-Se .env.example não existir (não encontrado), crie:
+Copie o arquivo de exemplo e preencha com suas credenciais:
 
 ```bash
-cp .env.example .env   # se existir
-# ou criar manualmente:
+cp .env.example .env
 ```
 
 Conteúdo mínimo:
@@ -128,10 +127,9 @@ npm run test:ui
 npm run coverage
 ```
 
-## 🐳 Docker Compose (Se tiver docker-compose.yml)
+## 🐳 Docker Compose
 
-Não localizado no snapshot → “não encontrado”.
-Criar exemplo:
+O projeto inclui `docker-compose.yml` para RabbitMQ:
 
 ```yaml
 version: "3.9"
@@ -164,7 +162,7 @@ npm run coverage
 
 | Problema                    | Causa                       | Solução                        |
 | --------------------------- | --------------------------- | ------------------------------ |
-| 404 em /home                | Rota não existente → usar / | Acessar rota correta           |
+| 404 em rotas                | Rota não existe              | Verificar URL e roteamento     |
 | Sessão não carrega          | Variáveis Google faltando   | Preencher .env e reiniciar     |
 | Feedback IA nunca chega     | Worker/fila ausente         | Subir RabbitMQ e worker        |
 | ERRO: fetch /api/atividades | Rota não implementada       | Criar route.ts conforme padrão |

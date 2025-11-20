@@ -7,28 +7,42 @@ Esta seção descreve como o projeto está organizado internamente.
 (Exibindo apenas partes principais mencionadas)
 
 ```text
-src/
-  app/
-    home/page.tsx
-    estruturas/
-      lista/
-        types/
-          ldse/
-            activity.tsx
-            rag_contexts.ts
-    api/                # (supondo rotas REST - não encontrado no snapshot)
-  components/
-    sidebar/
-    ui/
-  contexts/             # (suposição: estado global - não exibido)
-  lib/
-  test/                 # config de testes (suposição)
-workers/                # processamento fila (suposição)
-docs/
-README.md
+next-structlive/
+├── src/
+│   ├── app/
+│   │   ├── estruturas/
+│   │   │   ├── [structureId]/       # Rota dinâmica para módulos
+│   │   │   ├── lista/
+│   │   │   │   ├── types/
+│   │   │   │   │   ├── ldse/        # Lista Dinâmica Simplesmente Encadeada
+│   │   │   │   │   ├── ldde/        # Lista Dinâmica Duplamente Encadeada
+│   │   │   │   │   ├── lee/         # Lista Estática Encadeada
+│   │   │   │   │   ├── les/         # Lista Estática Sequencial
+│   │   │   │   │   └── lc/          # Lista Circular
+│   │   │   │   ├── module.config.ts # Metadados do módulo
+│   │   │   │   └── config.ts        # Registro de tipos
+│   │   │   └── index.ts             # Registry global de módulos
+│   │   ├── api/                     # API Routes
+│   │   │   ├── auth/
+│   │   │   ├── atividades/
+│   │   │   ├── responder/
+│   │   │   ├── respostas/
+│   │   │   └── logs/
+│   │   └── globals.css
+│   ├── components/
+│   │   ├── sidebar/
+│   │   └── ui/                      # shadcn/ui components
+│   ├── lib/                         # Utilitários e configurações
+│   │   └── structure-registries.ts  # Registry master
+│   └── test/                        # Config de testes
+├── scripts/                          # Scripts de automação
+│   ├── create-module.ts             # Criar novos módulos
+│   └── create-type.ts               # Adicionar tipos
+├── workers/
+│   └── responderWorker.ts           # Worker RabbitMQ
+├── docs/                            # Documentação completa
+└── README.md
 ```
-
-Itens marcados como suposição não apareceram no trecho fornecido, mas são coerentes com o padrão do ecossistema Next.js e variáveis.
 
 ## 🧱 Camadas (Lógicas)
 
@@ -46,8 +60,9 @@ Itens marcados como suposição não apareceram no trecho fornecido, mas são co
 ## 🔌 Pontos de Entrada
 
 - Web: App Router do Next.js (cada diretório com page.tsx).
-- Página inicial pós-login: /src/app/home/page.tsx.
-- Atividades: /src/app/estruturas/lista/types/ldse/activity.tsx.
+- Rotas dinâmicas: /src/app/estruturas/[structureId]/page.tsx
+- Módulos: /src/app/estruturas/lista/ (com 5 tipos: LDSE, LDDE, LEE, LES, LC)
+- Atividades: /src/app/estruturas/lista/types/[tipo]/activity.tsx
 
 ## 🚦 Rotas / Endpoints
 
@@ -57,33 +72,34 @@ Formato padrão Next.js App Router:
 /src/app/api/<nome>/route.ts
 ```
 
-No snapshot não foram mostrados, mas o front chama:
+**API Routes Implementadas:**
 
-- GET /api/atividades
-- POST /api/responder
-- GET /api/respostas/:id
+- `GET /api/atividades` - Lista atividades disponíveis
+- `POST /api/responder` - Submete resposta de atividade
+- `GET /api/respostas/:id` - Busca status/feedback
+- `/api/auth/*` - Autenticação NextAuth
+- `POST /api/logs` - Logging de eventos
 
-Esses devem existir em pastas respectivas:
-
+**Localização:**
 ```
-src/app/api/atividades/route.ts
-src/app/api/responder/route.ts
-src/app/api/respostas/[id]/route.ts
+src/app/api/
+├── atividades/route.ts
+├── responder/route.ts
+├── respostas/[id]/route.ts
+├── auth/[...nextauth]/route.ts
+└── logs/route.ts
 ```
-
-Se não existirem, criar (ver docs/how-to-add-a-module.md para template).
 
 ## 🧠 Estado Global
 
 Trecho em /src/app/home/page.tsx:
 
-```ts
-const { progress, dataStructures } = useAppContext();
-```
+Gerenciamento de estado está distribuído entre:
 
-Logo existe um contexto em /src/contexts/AppContext.(tsx|ts). Não exibido → “não encontrado”.
-
-Armazena progresso (datas de último acesso) e catálogo de estruturas.
+- **Contextos React**: Para estado UI e autenticação
+- **Server State**: Via Supabase para dados persistentes
+- **Session**: NextAuth para autenticação
+- **Registros**: Sistema de configuração em `src/app/estruturas/index.ts` e `src/lib/structure-registries.ts`
 
 ## 📄 Exemplo de Análise IA
 
@@ -175,11 +191,21 @@ Chamado em activity.tsx para trilha de eventos: enviar_resposta, solicitar_expli
 Novo módulo segue padrão:
 
 ```
-src/app/estruturas/<nome>/page.tsx
-src/app/estruturas/<nome>/types/<variação>/*
+src/app/estruturas/<nome>/
+├── module.config.ts     # Metadados (ícone, título, etc.)
+├── config.ts            # Registro de tipos
+└── types/
+    └── <variação>/
+        ├── theory.tsx
+        ├── visualization.tsx
+        ├── activity.tsx
+        ├── challenge.tsx
+        └── config.ts
 ```
 
-Ver docs/how-to-add-a-module.md para passo a passo.
+**Recomendado:** Use os scripts de automação!
+- Ver [docs/modules.md](modules.md) para usar `create-module.ts` e `create-type.ts`
+- Ver [docs/how-to-add-a-module.md](how-to-add-a-module.md) para processo manual
 
 ## 🛡 Boas Práticas Recomendadas
 

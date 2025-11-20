@@ -1,16 +1,16 @@
-# Guia Completo de Criação e Personalização de Módulos
+# 🧩 Guia Completo de Criação de Módulos
 
-Este guia explica como usar os scripts de automação para criar módulos e como personalizar cada aspecto do módulo criado.
-
----
+Este guia explica como usar os scripts de automação para criar módulos e tipos, além de como personalizar cada aspecto do módulo criado.
 
 ## 📋 Índice
 
-1. [Comandos Disponíveis](#comandos-disponíveis)
-2. [O Que Cada Comando Faz](#o-que-cada-comando-faz)
-3. [Como Personalizar um Módulo](#como-personalizar-um-módulo)
-4. [Estrutura de Arquivos Gerada](#estrutura-de-arquivos-gerada)
-5. [Exemplos Práticos](#exemplos-práticos)
+1. [Comandos Disponíveis](#-comandos-disponíveis)
+2. [O Que Cada Comando Faz](#-o-que-cada-comando-faz)
+3. [Como Personalizar um Módulo](#-como-personalizar-um-módulo)
+4. [Estrutura de Arquivos Gerada](#-estrutura-de-arquivos-gerada)
+5. [Exemplos Práticos](#-exemplos-práticos)
+6. [Solução de Problemas](#-solução-de-problemas)
+7. [Referência Rápida](#-referência-rápida)
 
 ---
 
@@ -62,127 +62,21 @@ src/app/estruturas/pilha/
 Para cada tipo (ex: "Pilha Estática"), cria 4 arquivos:
 
 1. **`theory.tsx`** - Componente de teoria
-```tsx
-export default function Theory() {
-  return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Teoria de Pilha Estática</h2>
-      <p>Conteúdo da teoria sobre Pilha Estática será adicionado aqui.</p>
-    </div>
-  );
-}
-```
-
 2. **`visualization.tsx`** - Componente de visualização
-```tsx
-export default function Visualization() {
-  return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Visualização de Pilha Estática</h2>
-      <p>Componente de visualização de Pilha Estática será adicionado aqui.</p>
-    </div>
-  );
-}
-```
-
 3. **`activity.tsx`** - Componente de atividades
-```tsx
-export default function Activity() {
-  return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Atividade de Pilha Estática</h2>
-      <p>Componente de atividade de Pilha Estática será adicionado aqui.</p>
-    </div>
-  );
-}
-```
-
 4. **`challenge.tsx`** - Componente de desafios
-```tsx
-export default function Challenge() {
-  return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Desafio de Pilha Estática</h2>
-      <p>Componente de desafio de Pilha Estática será adicionado aqui.</p>
-    </div>
-  );
-}
-```
-
 5. **`config.ts`** - Configuração do tipo
-```typescript
-import Theory from "./theory";
-import Visualization from "./visualization";
-import Activity from "./activity";
-import Challenge from "./challenge";
-
-export const PilhaEstticaConfig = {
-  id: "pilha-estatica",
-  name: "Pilha Estática",
-  components: {
-    theory: Theory,
-    visualization: Visualization,
-    activity: Activity,
-    challenge: Challenge,
-  },
-  disabled: false,
-};
-```
 
 **Passo 3: Criação de Arquivos de Configuração do Módulo**
 
 1. **`module.config.ts`** - Metadados do módulo
-```typescript
-export const PilhaModuleConfig = {
-  id: "pilha",
-  title: "Pilhas",
-  created: true,
-  description: "Descrição do módulo Pilha.",
-  icon: "🧩",  // ← Ícone padrão
-  complexity: "Básico" as const,
-  lessons: 2,  // ← Número de tipos criados
-};
-```
-
 2. **`config.ts`** - Registro de tipos do módulo
-```typescript
-import { PilhaEstticaConfig } from "./types/pilha-estatica/config";
-import { PilhaDinmicaConfig } from "./types/pilha-dinamica/config";
-
-export const PilhaRegistry = {
-  'pilha-estatica': PilhaEstticaConfig,
-  'pilha-dinamica': PilhaDinmicaConfig,
-};
-
-export const PilhaOptions = Object.values(PilhaRegistry).map((item) => ({
-  id: item.id,
-  name: item.name,
-  disabled: item.disabled,
-}));
-```
 
 **Passo 4: Registro Automático Global**
 
-Atualiza automaticamente dois arquivos:
-
-1. **`src/app/estruturas/index.ts`**
-```typescript
-import { listsModuleConfig } from "./lista/module.config";
-import { PilhaModuleConfig } from "./pilha/module.config"; // ← NOVO
-
-export const modules = [listsModuleConfig, PilhaModuleConfig]; // ← NOVO
-```
-
-2. **`src/lib/structure-registries.ts`**
-```typescript
-import { listRegistry } from '@/app/estruturas/lista/config';
-import { PilhaRegistry } from '@/app/estruturas/pilha/config'; // ← NOVO
-
-export const masterRegistry = {
-  lista: listRegistry,
-  pilha: PilhaRegistry, // ← NOVO
-};
-```
+Atualiza automaticamente:
+1. `src/app/estruturas/index.ts`
+2. `src/lib/structure-registries.ts`
 
 ---
 
@@ -220,7 +114,7 @@ export const PilhaModuleConfig = {
   id: "pilha",
   title: "Estrutura Pilha (Stack)", // ← Título exibido na UI
   created: true,
-  description: "Uma estrutura LIFO (Last In, First Out) fundamental para desenvolvimento de software.", // ← Descrição
+  description: "Uma estrutura LIFO (Last In, First Out) fundamental.", // ← Descrição
   icon: "📚",
   complexity: "Básico" as const,
   lessons: 2,
@@ -273,7 +167,7 @@ export const PilhaEstticaConfig = {
 
 ### 6. Personalizar o Conteúdo dos Componentes
 
-Edite diretamente os arquivos `.tsx` em `src/app/estruturas/[modulo]/types/[tipo]/`:
+Edite diretamente os arquivos `.tsx` em `src/app/estruturas/[modulo]/types/[tipo]/`
 
 **Exemplo - `theory.tsx`:**
 ```tsx
@@ -401,6 +295,11 @@ Isso:
 ### Problema: Ícone não aparece
 **Solução:** Use um emoji válido. Evite caracteres especiais que não sejam emojis.
 
+### Problema: Erro ao executar scripts
+**Solução:** 
+- Certifique-se de estar na raiz do projeto
+- Verifique se `tsx` está instalado: `npm install -D tsx`
+
 ---
 
 ## 📚 Referência Rápida
@@ -413,6 +312,14 @@ Isso:
 | Desabilitar tipo | `[modulo]/types/[tipo]/config.ts` → `disabled` |
 | Renomear tipo | `[modulo]/types/[tipo]/config.ts` → `name` |
 | Editar conteúdo | `[modulo]/types/[tipo]/[componente].tsx` |
+
+---
+
+## 📖 Ver Também
+
+- [Scripts de Automação](scripts.md) - Documentação técnica detalhada dos scripts
+- [How to Add a Module](how-to-add-a-module.md) - Processo manual (quando necessário)
+- [Arquitetura](architecture.md) - Entenda a estrutura do projeto
 
 ---
 

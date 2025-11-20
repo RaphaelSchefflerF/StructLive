@@ -1,287 +1,210 @@
 # 🏗️ StructLive
 
+[![Next.js](https://img.shields.io/badge/Next.js-15.2-black?logo=next.js)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-blue?logo=typescript)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19-61dafb?logo=react)](https://reactjs.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
+
 > Plataforma visual e interativa para aprender Estruturas de Dados passo a passo.
 
-## 📚 Sumário Rápido (TOC)
+## 🎯 Sobre
 
-- [Visão Geral](#-sobre-o-projeto)
-- [Como Começar Rápido](#️-início-rápido)
-- [Documentação Completa](#-documentação-completa)
-- [Tecnologias](#-tecnologias)
-- [Estrutura do Projeto](#-estrutura-do-projeto)
-- [Testes](#-testes)
-- [Docker](#-docker)
-- [Próximos Passos](#-próximos-passos)
+O StructLive é uma plataforma educacional que oferece uma experiência completa e interativa para aprendizado de estruturas de dados:
 
-## 🏁 Início Rápido
+- **📚 Teoria Interativa**: Conteúdo didático rico e acessível
+- **🎨 Visualizações Animadas**: Veja estruturas de dados em ação
+- **💻 Desafios Práticos**: Editor de código com análise por IA
+- **🎮 Atividades Gamificadas**: Questionários com sistema de progresso
+- **📊 Estruturas Disponíveis**: Listas (LDSE, LDDE, LEE, LES) e mais
+
+## 🚀 Início Rápido
 
 ```bash
+# Clone o repositório
 git clone <url-do-repositorio>
-cd StructLive
-cp .env.example .env   # se existir (não encontrado no snapshot, suposição)
+cd next-structlive
+
+# Instale as dependências
 npm install
+
+# Configure as variáveis de ambiente
+cp .env.example .env
+# Edite o .env com suas credenciais
+
+# Inicie o servidor de desenvolvimento
 npm run dev
 ```
 
-Abra: http://localhost:3000
+Acesse: **http://localhost:3000**
 
-Se precisar de ajuda: leia docs/setup.md.
+> 💡 **Primeira vez?** Veja o [Guia de Setup](docs/setup.md) detalhado.
 
-## 📖 Documentação Completa
+## 📚 Documentação
 
-| Tema              | Arquivo                                                    |
-| ----------------- | ---------------------------------------------------------- |
-| Visão Geral       | [docs/overview.md](docs/overview.md)                       |
-| Arquitetura       | [docs/architecture.md](docs/architecture.md)               |
-| Setup / Ambiente  | [docs/setup.md](docs/setup.md)                             |
-| Stack Técnica     | [docs/tech-stack.md](docs/tech-stack.md)                   |
-| Criar Novo Módulo | [docs/how-to-add-a-module.md](docs/how-to-add-a-module.md) |
-| Glossário         | [docs/glossary.md](docs/glossary.md)                       |
-| FAQ               | [docs/faq.md](docs/faq.md)                                 |
+A documentação completa está organizada na pasta [`docs/`](docs/):
 
-## 🎯 Sobre o Projeto
+### 🎯 Essenciais
 
-O StructLive é uma plataforma educacional que oferece:
+- **[📖 Documentação Completa](docs/README.md)** - Índice de toda a documentação
+- **[🏗️ Arquitetura](docs/architecture.md)** - Estrutura e organização do projeto
+- **[⚙️ Setup](docs/setup.md)** - Guia completo de instalação e configuração
+- **[🧩 Criando Módulos](docs/modules.md)** - Como criar novos módulos automaticamente
 
-- **Teoria Interativa**: Conteúdo didático sobre estruturas de dados
-- **Visualizações Animadas**: Animações que demonstram operações em estruturas
-- **Desafios Práticos**: Editor de código com análise de IA
-- **Atividades Gamificadas**: Questionários com sistema de progresso
-- **Estruturas**: Listas (LDSE)
+### 🛠️ Desenvolvimento
 
-### Tipos de estrutura de dados
+- **[🔧 Scripts](docs/scripts.md)** - Scripts de automação disponíveis
+- **[🧪 Testes](docs/testing.md)** - Como executar e escrever testes
+- **[🤝 Contribuindo](docs/contributing.md)** - Guia de contribuição
 
-- **LDSE**: Lista Dinâmica Simplesmente Encadeada
+### 🚀 Deploy & Referência
 
-## 🚀 Tecnologias
+- **[🚀 Deployment](docs/deployment.md)** - Como fazer deploy em produção
+- **[📊 Stack Técnica](docs/tech-stack.md)** - Tecnologias utilizadas
+- **[❓ FAQ](docs/faq.md)** - Perguntas frequentes
+- **[📝 Glossário](docs/glossary.md)** - Termos e definições
+
+## 🛠️ Stack Técnica
 
 ### Frontend
-
-- **Next.js** - Framework React
-- **React** - Biblioteca de interface
-- **TypeScript** - Linguagem tipada
-- **Tailwind CSS** - Framework de estilos
+- **Next.js 15** - Framework React com App Router
+- **React 19** - Biblioteca de interface
+- **TypeScript 5.8** - Linguagem tipada
+- **Tailwind CSS 4** - Framework de estilos
 - **shadcn/ui** - Componentes de interface
-- **Monaco Editor** - Editor de código
-- **React Markdown** - Renderização de markdown
 
 ### Backend & Serviços
-
 - **NextAuth.js** - Autenticação
-- **Supabase** - Banco de dados
-- **Google Gemini AI** - Análise de código
+- **Supabase** - Banco de dados PostgreSQL
+- **Google Gemini AI** - Análise de código por IA
 - **RabbitMQ** - Sistema de filas
 
-### Testes
-
+### Testes & Qualidade
 - **Vitest** - Framework de testes
-- **Testing Library** - Utilitários de teste
-- **jsdom** - Ambiente DOM para testes
+- **Testing Library** - Testes de componentes
+- **ESLint** - Linting de código
 
-## 📋 Pré-requisitos
-
-Antes de começar, verifique se você tem instalado:
-
-- **Node.js**
-- **npm**
-- **Docker**
-- **Git**
-
-## 🔧 Instalação
-
-1. **Clone o repositório**
-
-```bash
-git clone <url-do-repositorio>
-cd StructLive
-```
-
-2. **Instale as dependências**
-
-```bash
-npm install
-```
-
-## ⚙️ Configuração
-
-### 1. Variáveis de Ambiente
-
-Crie um arquivo `.env` na raiz do projeto:
-
-```env
-# Autenticação Google
-GOOGLE_CLIENT_ID="seu-google-client-id"
-GOOGLE_CLIENT_SECRET="seu-google-client-secret"
-
-# NextAuth
-NEXTAUTH_SECRET="sua-chave-secreta-nextauth"
-NEXTAUTH_URL="http://localhost:3000"
-
-# Supabase
-SUPABASE_URL="sua-url-supabase"
-SUPABASE_SERVICE_ROLE_KEY="sua-chave-service-role"
-
-# Google Gemini AI
-GEMINI_API_KEY="sua-chave-gemini-ai"
-GEMINI_API_KEY2="sua-chave-gemini-ai-2"
-
-# RabbitMQ
-RABBITMQ_URL="sua-url-rabbitmq"
-```
-
-### 2. Configuração do Google OAuth
-
-1. Acesse o [Google Cloud Console](https://console.cloud.google.com/)
-2. Crie um novo projeto ou selecione um existente
-3. Ative a API do Google+
-4. Crie credenciais OAuth 2.0
-5. Adicione `http://localhost:3000/api/auth/callback/google` como URI de redirecionamento
-
-### 3. Configuração do Supabase
-
-1. Crie uma conta no [Supabase](https://supabase.com/)
-2. Crie um novo projeto
-3. Obtenha a URL e a chave de serviço
-4. Configure as tabelas necessárias
-
-### 4. Configuração do Google Gemini
-
-1. Acesse o [Google AI Studio](https://aistudio.google.com/)
-2. Gere uma API key
-3. Adicione a chave ao arquivo `.env`
-
-### 5. Configuração do RabbitMQ
-
-#### Opção 1: Docker (Recomendado)
-
-```bash
-docker-compose up -d
-```
-
-#### Opção 2: CloudAMQP (Produção)
-
-1. Crie uma conta no [CloudAMQP](https://www.cloudamqp.com/)
-2. Crie uma instância
-3. Use a URL fornecida na variável `RABBITMQ_URL`
-
-## 🏃‍♂️ Execução
-
-### Desenvolvimento
-
-```bash
-# Inicia o servidor de desenvolvimento
-npm run dev
-
-# Inicia o worker do RabbitMQ (em outro terminal)
-npm run start:worker
-```
-
-O projeto estará disponível em `http://localhost:3000`
-
-### Produção
-
-```bash
-# Build do projeto
-npm run build
-
-# Inicia o servidor de produção
-npm start
-```
-
-### Interface de Desenvolvimento
-
-```bash
-# Interface do Vitest (testes)
-npm run test:ui
-```
+> 📚 Veja mais detalhes em [Tech Stack](docs/tech-stack.md)
 
 ## 📁 Estrutura do Projeto
 
-(árvore detalhada e explicações adicionais em docs/architecture.md)
-
-```text
-StructLive/
-StructLive/
-├── src/
-│   ├── app/                          # App Router (Next.js 13+)
-│   │   ├── api/                      # API Routes
-│   │   ├── estruturas/               # Páginas de estruturas
-│   │   │   └── lista/
-│   │   │       └── types/
-│   │   │           ├── ldse/         # Lista Dinâmica Simplesmente Encadeada
-│   │   │           ├── ldde/         # Lista Dinâmica Duplamente Encadeada
-│   │   │           ├── lee/          # Lista Estática Encadeada
-│   │   │           └── les/          # Lista Estática Sequencial
-│   │   └── globals.css               # Estilos globais
-│   ├── components/                   # Componentes reutilizáveis
-│   │   └── ui/                       # Componentes shadcn/ui
-│   ├── lib/                          # Utilitários e configurações
-│   └── test/                         # Configurações de teste
-├── workers/                          # Workers RabbitMQ
-├── public/                           # Arquivos estáticos
-├── __tests__/                        # Testes unitários
-└── docs/                             # Documentação
 ```
+next-structlive/
+├── src/
+│   ├── app/                  # App Router (Next.js 15)
+│   │   ├── api/             # API Routes
+│   │   └── estruturas/      # Páginas de estruturas de dados
+│   ├── components/          # Componentes reutilizáveis
+│   │   └── ui/             # Componentes shadcn/ui
+│   └── lib/                # Utilitários e configurações
+├── docs/                    # 📚 Documentação completa
+├── scripts/                 # 🔧 Scripts de automação
+├── workers/                 # ⚙️ Workers RabbitMQ
+└── __tests__/              # 🧪 Testes unitários
+```
+
+> 📖 Veja a [Arquitetura Completa](docs/architecture.md)
+
+## ⚡ Scripts Disponíveis
+
+```bash
+# Desenvolvimento
+npm run dev              # Inicia servidor de desenvolvimento
+npm run start:worker     # Inicia worker RabbitMQ
+
+# Build & Produção
+npm run build           # Build de produção
+npm start               # Inicia servidor de produção
+
+# Testes
+npm test                # Executa testes
+npm run test:watch      # Testes em modo watch
+npm run test:ui         # Interface visual de testes
+npm run coverage        # Relatório de cobertura
+
+# Qualidade de Código
+npm run lint            # Verifica problemas de lint
+npm run type-check      # Verifica erros de TypeScript
+
+# Criação de Módulos
+npx tsx scripts/create-module.ts "Nome do Módulo" "Tipo 1" "Tipo 2"
+npx tsx scripts/create-type.ts "Módulo Existente" "Novo Tipo"
+```
+
+> 🔧 Veja mais em [Scripts de Automação](docs/scripts.md)
+
+## 🧩 Criando Novos Módulos
+
+Criar novos módulos é simples com os scripts de automação:
+
+```bash
+# Criar um módulo completo
+npx tsx scripts/create-module.ts "Pilha" "Pilha Estática" "Pilha Dinâmica"
+
+# Adicionar tipo a módulo existente
+npx tsx scripts/create-type.ts "Pilha" "Pilha com Lista"
+```
+
+Os scripts criam automaticamente:
+- ✅ Estrutura de diretórios
+- ✅ Componentes (teoria, visualização, atividade, desafio)
+- ✅ Arquivos de configuração
+- ✅ Registros globais atualizados
+
+> 📖 Guia completo: [Criando Módulos](docs/modules.md)
 
 ## 🧪 Testes
 
-### Comandos de Teste
-
 ```bash
-# Executa todos os testes
+# Executar todos os testes
 npm test
 
-# Executa testes em modo watch
+# Modo watch (desenvolvimento)
 npm run test:watch
 
-# Gera relatório de cobertura
-npm run coverage
+# Interface visual
+npm run test:ui
 ```
+
+> 📚 Veja o [Guia de Testes](docs/testing.md)
 
 ## 🐳 Docker
 
-### Desenvolvimento com Docker
-
 ```bash
-# Apenas RabbitMQ
+# Iniciar RabbitMQ
 docker-compose up -d
 
 # Verificar status
 docker ps
 
-# Logs
+# Ver logs
 docker-compose logs -f
 ```
 
-### Acessos
+**Acessos:**
+- Aplicação: http://localhost:3000
+- RabbitMQ Management: http://localhost:15672 (guest/guest)
 
-- **Aplicação**: <http://localhost:3000>
-- **RabbitMQ Management**: <http://localhost:15672> (guest/guest)
+## 🤝 Como Contribuir
 
-## 🔗 Recursos Relacionados
+Contribuições são bem-vindas! Por favor:
 
-- Autenticação (NextAuth) – ver docs/architecture.md
-- Integração IA (Google Gemini) – ver docs/tech-stack.md
-- Filas (RabbitMQ) – ver docs/architecture.md#integrações-externas
+1. Leia o [Guia de Contribuição](docs/contributing.md)
+2. Fork o projeto
+3. Crie uma branch para sua feature
+4. Faça commit seguindo [Conventional Commits](docs/contributing.md#convenções-de-commit)
+5. Abra um Pull Request
 
-## ✅ Próximos Passos
+## 📝 Licença
 
-1. Ler docs/overview.md para entender o “porquê”.
-2. Fazer o setup completo (docs/setup.md).
-3. Explorar a arquitetura (docs/architecture.md).
-4. Criar um módulo de exemplo seguindo docs/how-to-add-a-module.md.
-5. Abrir sua primeira Pull Request usando a checklist.
+Este projeto é de código aberto.
 
-## 🛠 Branch Sugerida para esta Documentação
+## 🔗 Links Úteis
 
-```
-git checkout -b docs/beginner-guide
-```
-
-## 💬 Suporte
-
-Dúvidas comuns? Veja docs/faq.md. Termos? docs/glossary.md.
+- [📖 Documentação Completa](docs/README.md)
+- [🏗️ Visão Geral do Projeto](docs/overview.md)
+- [❓ FAQ](docs/faq.md)
+- [📝 Glossário](docs/glossary.md)
 
 ---
 
-(Conteúdo original preservado acima e abaixo com ajustes mínimos para links.)
+**Desenvolvido com ❤️ para estudantes de Estruturas de Dados**

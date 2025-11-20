@@ -1,6 +1,19 @@
 # 🧰 Tech Stack
 
-Lista das principais tecnologias e o “por quê”.
+Lista das principais tecnologias, versões e o "por quê".
+
+## 📌 Versões Principais
+
+| Tecnologia      | Versão | Onde Usar                |
+|-----------------|--------|-------------------------|
+| **Next.js**     | 15.2.1 | Framework principal     |
+| **React**       | 19.0.0 | UI Components           |
+| **TypeScript**  | 5.8.3  | Todo o projeto          |
+| **Tailwind CSS**| 4.x    | Estilização             |
+| **Vitest**      | 3.2.4  | Testes                  |
+| **Node.js**     | >= 18  | Runtime (desenvolvimento)|
+
+---
 
 ## Frontend
 
@@ -64,13 +77,23 @@ Lista das principais tecnologias e o “por quê”.
 | RabbitMQ           | Escalabilidade assíncrona | Overhead para módulos simples |
 | IA externa         | Feedback rico             | Limite de custo e latência    |
 
-## Versões (Não vistas, suposições)
+## Versões Completas
 
-Recomenda-se fixar versões no package.json para reprodutibilidade.
+Versões completas estão fixadas em `package.json` para reprodutibilidade.
+
+Principais dependências:
+- Next.js: 15.2.1
+- React: 19.0.0
+- TypeScript: 5.8.3
+- Tailwind CSS: 4.x
+- @monaco-editor/react: 4.7.0
+- react-markdown: 10.1.0
+- next-auth: 4.24.11
+- @supabase/supabase-js: 2.49.4
 
 ## Sugestões Futuras
 
-- Adicionar Zod para validação schema.
-- Implementar i18n (ex: next-intl).
-- Observabilidade (OpenTelemetry).
-- ESLint + Prettier (se já não existir).
+- Adicionar Zod para validação de schema
+- Implementar i18n (ex: next-intl)
+- Adicionar observabilidade (OpenTelemetry)
+- Configurar Prettier para formatação automática
