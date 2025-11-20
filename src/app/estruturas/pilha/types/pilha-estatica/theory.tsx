@@ -1,8 +1,9 @@
-export default function StackTheory() {
+
+export default function Theory() {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Teoria da Pilha</h2>
-      <p>Uma pilha é uma estrutura de dados linear que segue o princípio LIFO (Last In, First Out), ou seja, o último elemento a ser inserido é o primeiro a ser removido.</p>
+      <h2 className="text-2xl font-bold mb-4">Teoria de Pilha Estática</h2>
+      <p>Conteúdo da teoria sobre Pilha Estática será adicionado aqui.</p>
     </div>
   );
 }

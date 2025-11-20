@@ -29,18 +29,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { listOptions } from "../lista/config";
-
-
+import { masterRegistry } from "@/lib/structure-registries";
 
 import { useAppContext } from "@/contexts/AppContext";
 import StructureContentRenderer from "./components/structure-content-renderer";
 
 function StructurePageContent({ params }: { params: { structureId: string } }) {
   const searchParams = useSearchParams();
-  const [tipoLista, setTipoLista] = useState("ldse");
   const { getStructureById } = useAppContext();
   const structure = getStructureById(params.structureId);
+
+  // Dynamic Registry Logic
+  const currentRegistry = masterRegistry[params.structureId as keyof typeof masterRegistry];
+  const options = currentRegistry 
+    ? Object.values(currentRegistry).map(item => ({
+        id: item.id,
+        name: item.name,
+        disabled: item.disabled
+      }))
+    : [];
+
+  const [tipoLista, setTipoLista] = useState(options.length > 0 ? options[0].id : "");
 
   // Lê o parâmetro 'tab' da URL, padrão é 'conteudo'
   const tabFromUrl = searchParams.get("tab") || "conteudo";
@@ -107,19 +116,19 @@ function StructurePageContent({ params }: { params: { structureId: string } }) {
             {structure.description}
           </p>
         </div>
-        {/* Select de tipos de lista */}
-        {params.structureId === 'lista' && (
+        {/* Dynamic Select for Types */}
+        {options.length > 0 && (
           <div className="mt-6 mb-4 flex items-center gap-4">
             <span className="text-base text-muted-foreground">
               Selecione qual estrutura você deseja:
             </span>
             <Select value={tipoLista} onValueChange={setTipoLista}>
               <SelectTrigger className="w-[330px]">
-                <SelectValue placeholder="Selecione o tipo de lista" />
+                <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {listOptions.map((option) => (
+                  {options.map((option) => (
                     <SelectItem key={option.id} value={option.id} disabled={option.disabled}>
                       {option.name}
                     </SelectItem>
@@ -178,14 +187,14 @@ function StructurePageContent({ params }: { params: { structureId: string } }) {
           {/* Conteudo - Explicação teórica */}
           <TabsContent value="conteudo">
             <div className="border rounded-lg p-6 bg-card">
-              <StructureContentRenderer structureId={params.structureId} listType={tipoLista} contentType="theory" />
+              <StructureContentRenderer structureId={params.structureId as keyof typeof masterRegistry} listType={tipoLista} contentType="theory" />
             </div>
           </TabsContent>
 
           {/* Visualização interativa */}
           <TabsContent value="visualization">
             <div className="border rounded-lg bg-card">
-              <StructureContentRenderer structureId={params.structureId} listType={tipoLista} contentType="visualization" />
+              <StructureContentRenderer structureId={params.structureId as keyof typeof masterRegistry} listType={tipoLista} contentType="visualization" />
             </div>
           </TabsContent>
 
@@ -198,7 +207,7 @@ function StructurePageContent({ params }: { params: { structureId: string } }) {
               <p className="text-muted-foreground mb-6">
                 Complete os desafios para testar seu conhecimento sobre listas.
               </p>
-              <StructureContentRenderer structureId={params.structureId} listType={tipoLista} contentType="activity" />
+              <StructureContentRenderer structureId={params.structureId as keyof typeof masterRegistry} listType={tipoLista} contentType="activity" />
             </div>
           </TabsContent>
 
@@ -211,7 +220,7 @@ function StructurePageContent({ params }: { params: { structureId: string } }) {
               <p className="text-muted-foreground mb-6">
                 Enfrente os desafios para aprimorar suas habilidades em listas.
               </p>
-              <StructureContentRenderer structureId={params.structureId} listType={tipoLista} contentType="challenge" />
+              <StructureContentRenderer structureId={params.structureId as keyof typeof masterRegistry} listType={tipoLista} contentType="challenge" />
             </div>
           </TabsContent>
         </Tabs>

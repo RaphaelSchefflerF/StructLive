@@ -1,4 +1,4 @@
 import { listsModuleConfig } from "./lista/module.config";
-import { stackModuleConfig } from "./pilha/module.config";
+import { PilhaModuleConfig } from "./pilha/module.config";
 
-export const modules = [listsModuleConfig, stackModuleConfig];
+export const modules = [listsModuleConfig, PilhaModuleConfig];

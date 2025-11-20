@@ -10,7 +10,7 @@ export default function StructureContentRenderer({ structureId, listType, conten
   const registry = masterRegistry[structureId];
   if (!registry) return <div>Estrutura não encontrada.</div>;
 
-  const list = registry[listType];
+  const list = (registry as any)[listType];
   if (!list) return <div>Tipo de lista não encontrado.</div>;
 
   const Component = list.components[contentType];

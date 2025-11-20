@@ -1,9 +1,10 @@
-export const stackModuleConfig = {
+
+export const PilhaModuleConfig = {
   id: "pilha",
-  title: "Pilhas",
+  title: "Pilha",
   created: true,
-  description: "Estrutura de dados que organiza elementos no formato LIFO (Last-In, First-Out).",
-  icon: "🥞",
+  description: "Descrição do módulo Pilha.",
+  icon: "🧩",
   complexity: "Básico" as const,
-  lessons: 4,
+  lessons: 2,
 };

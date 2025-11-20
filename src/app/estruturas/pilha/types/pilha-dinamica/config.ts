@@ -4,9 +4,9 @@ import Visualization from "./visualization";
 import Activity from "./activity";
 import Challenge from "./challenge";
 
-export const PilhaEstticaConfig = {
-  id: "pilha-estatica",
-  name: "Pilha Estática",
+export const PilhaDinmicaConfig = {
+  id: "pilha-dinamica",
+  name: "Pilha Dinâmica",
   components: {
     theory: Theory,
     visualization: Visualization,
