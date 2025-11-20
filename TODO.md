@@ -1,4 +1,4 @@
-# Análise de Extensibilidade e Manutenibilidade da Plataforma
+# Análise de Extensibilidade e Manutenibilidade da Platahora
 
 ## 1. Resumo Executivo
 
@@ -31,282 +31,63 @@
 
 ---
 
-#### Problema 1: Renderização de conteúdo específico da lista via `switch case`
+✅ **RESOLVIDO na Fase 1-3**
 
-**Severidade:** 🔴 Alta
+## 9. Fase 4 - CORREÇÕES PÓS-AUDITORIA (CRÍTICO)
+
+> **Contexto:** Esta fase foi criada após auditoria de extensibilidade (AUDIT.md) que identificou problemas críticos impedindo a verdadeira extensibilidade do sistema para novas **estruturas de dados**.
+
+### Meta desta Fase
+- Atingir nota **9-10/10** em extensibilidade
+- Permitir adicionar novo tipo de lista em **< 5 minutos**
+- Permitir adicionar nova estrutura em **< 15 minutos**
+- **ZERO** duplicação de código entre estruturas
+- **ZERO** modificação de arquivos de código existentes ao adicionar features
+
+### Problemas Críticos a Resolver
+
+#### Problema 4.1: Duplicação de Estrutura para Novas Estruturas de Dados
+**Severidade:** 🔴 Crítica
 **Esforço:** 🟡 Médio
+**Identificado em:** AUDIT.md - Cenário 2
 
-**Situação Atual:**
-O componente `ListVisualization.tsx` (e outros similares) usa um `switch case` para decidir qual componente de visualização renderizar com base em uma string `tipo`.
-
-```typescript
-// src/app/estruturas/lista/components/list-visualization.tsx
-
-export default function ListVisualization({ tipo }: Props) {
-  switch (tipo) {
-    case "lc":
-      return <LcVisualization />;
-    case "ldde":
-      return <LddeVisualization />;
-    case "ldse":
-      return <LdseVisualization />;
-    // ... cada nova lista exige um novo case
-    default:
-      return <div>...</div>;
-  }
-}
-```
+**Situação Atual (Pós-Refatoração Fase 1-3):**
+A refatoração foi bem sucedida para *tipos de lista*, mas não para *estruturas de dados*. Para criar uma nova estrutura "Pilha", um desenvolvedor precisaria copiar toda a pasta `src/app/estruturas/lista` e renomear manualmente dezenas de variáveis e componentes.
 
 **Problema:**
-Este padrão viola o Princípio Aberto/Fechado. O componente `ListVisualization` precisa ser modificado toda vez que uma nova lista é adicionada. Isso centraliza a lógica de roteamento de componentes, criando um gargalo e um ponto de falha.
+A página (`page.tsx`), o renderizador de conteúdo (`ListContentRenderer`) e a configuração (`config.ts`) foram feitos especificamente para "Listas", em vez de uma "Estrutura de Dados" genérica. Isso viola o princípio DRY em um nível macro.
+
+**Impacto na Extensibilidade:**
+- ❌ Gera dívida técnica massiva a cada nova estrutura.
+- ❌ Torna a manutenção um pesadelo, pois correções de layout precisam ser aplicadas em múltiplas pastas copiadas.
 
 **Solução Proposta:**
-Implementar um **sistema de registro de componentes baseado em configuração**. Cada tipo de lista terá um arquivo de configuração que exporta seus componentes específicos. Os componentes "dispatcher" (`ListVisualization`, `ListTheory`, etc.) serão substituídos por um único componente genérico que renderiza o conteúdo com base no tipo de lista selecionado.
-
-**Exemplo de Código:**
-
-**Passo 1: Criar uma configuração para cada lista.**
-
-```typescript
-// PROPOSTA: src/app/estruturas/lista/types/ldse/config.ts
-import Activity from "./activity";
-import Challenge from "./challenge";
-import Theory from "./theory";
-import Visualization from "./visualization";
-
-export const ldseConfig = {
-  id: "ldse",
-  name: "Lista Dinâmica Simplesmente Encadeada",
-  components: {
-    theory: Theory,
-    visualization: Visualization,
-    activity: Activity,
-    challenge: Challenge,
-  },
-  disabled: false,
-};
-```
-
-**Passo 2: Criar um registro central de listas.**
-
-```typescript
-// PROPOSTA: src/app/estruturas/lista/config.ts
-import { ldseConfig } from "./types/ldse/config";
-// Importe outras configs aqui (lddeConfig, lcConfig, etc.)
-
-export const listRegistry = {
-  ldse: ldseConfig,
-  // ldde: lddeConfig,
-};
-
-export const listOptions = Object.values(listRegistry).map((list) => ({
-  id: list.id,
-  name: list.name,
-  disabled: list.disabled,
-}));
-```
-
-**Passo 3: Criar um renderizador genérico.**
-
-```typescript
-// PROPOSTA: src/app/estruturas/lista/components/list-content-renderer.tsx
-import { listRegistry } from "../config";
-
-type Props = {
-  listType: keyof typeof listRegistry;
-  contentType: "theory" | "visualization" | "activity" | "challenge";
-};
-
-export default function ListContentRenderer({ listType, contentType }: Props) {
-  const list = listRegistry[listType];
-  if (!list) return <div>Tipo de lista não encontrado.</div>;
-
-  const Component = list.components[contentType];
-  if (!Component) return <div>Conteúdo não encontrado.</div>;
-
-  return <Component />;
-}
-```
-
-**Passo 4: Usar o renderizador na página principal.**
-
-```typescript
-// ANTES: em ListPage.tsx
-<TabsContent value="conteudo">
-  <ListTheory tipo={tipoLista} />
-</TabsContent>
-
-// DEPOIS: em ListPage.tsx
-<TabsContent value="conteudo">
-  <ListContentRenderer listType={tipoLista} contentType="theory" />
-</TabsContent>
-```
-
-**Impacto:**
-- ✅ **Extensibilidade Máxima:** Para adicionar uma nova lista, basta criar uma nova pasta com seus componentes e um arquivo `config.ts`. **NENHUM arquivo existente precisa ser modificado.**
-- ✅ **Manutenibilidade:** O código fica descentralizado e coeso. A lógica de cada lista está contida em sua própria pasta.
-- ✅ **Segurança:** O sistema se torna mais robusto, pois é impossível selecionar uma lista que não tenha todos os seus componentes devidamente registrados.
+1.  **Generalizar a Rota:** Renomear `src/app/estruturas/lista/page.tsx` para `src/app/estruturas/[structureId]/page.tsx`, usando as rotas dinâmicas do Next.js.
+2.  **Generalizar a Página:** O novo componente de página `[structureId]/page.tsx` será genérico. Ele receberá `structureId` da URL, buscará a configuração correta para essa estrutura (ex: "Lista" ou "Pilha") e renderizará o layout. O `Select` de tipos (ex: ldse, ldde) será condicional, aparecendo apenas se a estrutura tiver múltiplos tipos.
+3.  **Generalizar o Renderer:** Criar um `StructureContentRenderer` universal que possa renderizar o conteúdo de qualquer tipo, de qualquer estrutura, com base nos parâmetros recebidos.
 
 **Prioridade:** 1
 
 ---
 
-#### Problema 2: Lista de seleção de tipos (`Select`) hardcoded
+#### Problema 4.2: Lista de Estruturas Hardcoded no `AppContext`
+**Severidade:** 🔴 Crítica
+**Esforço:** 🟢 Pequeno
+**Identificado em:** AUDIT.md - Cenário 2
 
-**Severidade:** 🔴 Alta
-**Esforço:** 🟢 Pequeno (após resolver o Problema 1)
-
-**Situação Atual:**
-O componente `Select` em `ListPage.tsx` tem seus itens hardcoded, o que exige modificação manual para adicionar ou habilitar novas listas.
-
-```typescript
-// src/app/estruturas/lista/page.tsx
-<SelectContent>
-  <SelectGroup>
-    <SelectItem value="les" disabled>Lista Estática Sequencial</SelectItem>
-    <SelectItem value="lee" disabled>Lista Estática Encadeada</SelectItem>
-    <SelectItem value="ldse">Lista Dinâmica Simplesmente Encadeada</SelectItem>
-    // ...
-  </SelectGroup>
-</SelectContent>
-```
+**Situação Atual (Pós-Refatoração Fase 1-3):**
+O `AppContext.tsx` contém um array `dataStructures` hardcoded que alimenta a `app-sidebar`. Para adicionar "Pilha" à sidebar, é preciso editar este arquivo central.
 
 **Problema:**
-Isso é uma fonte de inconsistência. A lista de `Select` pode ficar dessincronizada com os componentes que realmente existem, levando a bugs. É um processo manual e propenso a erros.
+Violação direta do Princípio Aberto/Fechado. O coração da aplicação (contexto global) não deveria ser modificado para adicionar uma nova feature modular.
+
+**Impacto na Extensibilidade:**
+- ❌ Alto risco de introduzir bugs de regressão em toda a aplicação.
+- ❌ Centraliza a configuração de módulos, o que não escala.
 
 **Solução Proposta:**
-Gerar os `SelectItem` dinamicamente a partir do `listOptions` criado no `listRegistry` (ver Problema 1).
-
-**Exemplo de Código:**
-
-```typescript
-// DEPOIS: em ListPage.tsx
-import { listOptions } from "./config"; // Importar a configuração
-
-// ...
-
-<SelectContent>
-  <SelectGroup>
-    {listOptions.map((option) => (
-      <SelectItem key={option.id} value={option.id} disabled={option.disabled}>
-        {option.name}
-      </SelectItem>
-    ))}
-  </SelectGroup>
-</SelectContent>
-```
-
-**Impacto:**
-- ✅ **Fonte Única da Verdade:** A lista de seleção é sempre um reflexo fiel das listas disponíveis no sistema.
-- ✅ **Zero Manutenção:** Adicionar uma nova lista na configuração (Problema 1) a adicionará automaticamente ao `Select`.
+1.  **Criar Configurações de Módulo:** Cada estrutura (ex: `lista`) terá um arquivo `module.config.ts` que exporta seus metadados (título, descrição, ícone, etc.).
+2.  **Criar Registro Global de Estruturas:** Criar um arquivo `src/config/structures.config.ts` que importa as configurações de cada módulo e as agrega em um único array `dataStructures`.
+3.  **Refatorar `AppContext`:** O `AppContext` passará a importar o array `dataStructures` do novo registro global, em vez de o definir localmente.
 
 **Prioridade:** 2
-
-## 5. Arquitetura Ideal Proposta
-
-A plataforma deve ser orientada por um **sistema de configuração modular e auto-registrável**.
-
-- **Estrutura de Pastas Ideal:**
-
-  ```
-  src/
-  └── app/
-      └── estruturas/
-          ├── [structureType]/
-          │   ├── config.ts         // Configuração principal da estrutura (ex: Listas)
-          │   ├── page.tsx          // Página genérica que usa o ContentRenderer
-          │   ├── components/
-          │   │   └── content-renderer.tsx // Componente que renderiza o conteúdo dinâmico
-          │   └── types/
-          │       └── [specificType]/   // ex: ldse
-          │           ├── config.ts     // Config da lista específica (exporta seus componentes)
-          │           ├── theory.tsx
-          │           ├── visualization.tsx
-          │           ├── activity.tsx
-          │           └── challenge.tsx
-          └── config.ts             // Configuração global de todas as estruturas
-  ```
-
-- **Padrões a Implementar:**
-  - **Injeção de Dependência / Registro de Serviço:** O `listRegistry` atua como um registro central. Cada `config.ts` de lista "registra" seus componentes.
-  - **Composição sobre Herança:** Usar componentes genéricos (`content-renderer`) que são compostos com os componentes específicos em tempo de execução.
-
-- **Sistema de Configuração Recomendado:**
-  - Um arquivo `config.ts` para cada "módulo" (ex: `lista/config.ts`).
-  - Um arquivo `config.ts` para cada "sub-módulo" (ex: `lista/types/ldse/config.ts`).
-  - Um arquivo de configuração global (`src/app/estruturas/config.ts`) que agrega todas as estruturas para alimentar a navegação principal.
-
-## 6. Guia Prático: Como Adicionar Features (Após Refatoração)
-
-**Para adicionar uma nova lista no StructLive (ex: "Lista Circular"):**
-
-1.  **Criar a Pasta:**
-    - Crie a pasta `src/app/estruturas/lista/types/lc`.
-
-2.  **Criar os Componentes:**
-    - Dentro da nova pasta, crie os arquivos `theory.tsx`, `visualization.tsx`, `activity.tsx`, e `challenge.tsx` com o conteúdo específico da Lista Circular.
-
-3.  **Criar o Arquivo de Configuração:**
-    - Crie o arquivo `src/app/estruturas/lista/types/lc/config.ts`:
-      ```typescript
-      import Activity from "./activity";
-      import Challenge from "./challenge";
-      import Theory from "./theory";
-      import Visualization from "./visualization";
-
-      export const lcConfig = {
-        id: "lc",
-        name: "Lista Circular",
-        components: {
-          theory: Theory,
-          visualization: Visualization,
-          activity: Activity,
-          challenge: Challenge,
-        },
-        disabled: false, // Mude para false para habilitar
-      };
-      ```
-
-4.  **Registrar a Nova Lista:**
-    - Abra `src/app/estruturas/lista/config.ts` e adicione a nova configuração ao registro:
-      ```typescript
-      import { ldseConfig } from "./types/ldse/config";
-      import { lcConfig } from "./types/lc/config"; // 1. Importar
-
-      export const listRegistry = {
-        ldse: ldseConfig,
-        lc: lcConfig, // 2. Adicionar ao registro
-      };
-
-      // ... o resto do arquivo se atualiza sozinho
-      ```
-
-**É isso.** A nova lista aparecerá no seletor e todas as abas funcionarão automaticamente.
-
-## 7. Roadmap de Implementação
-
-**Fase 1 - Crítico (Fazer AGORA)**
-- [ ] **Refatorar o Sistema de Listas:** Implementar a solução descrita nos Problemas 1 e 2.
-  - [ ] Criar o `ListContentRenderer`.
-  - [ ] Criar os arquivos `config.ts` para cada tipo de lista existente.
-  - [ ] Criar o `listRegistry` e `listOptions`.
-  - [ ] Atualizar `ListPage.tsx` para usar o `ListContentRenderer` e os `listOptions` dinâmicos.
-
-**Fase 2 - Importante (Próximas 2 semanas)**
-- [ ] **Abstrair para Outras Estruturas:** Criar um sistema de registro genérico para todas as estruturas de dados, não apenas listas. A `app-sidebar` deve ser alimentada por essa configuração global.
-- [ ] **Remover Código Morto:** Apagar os antigos componentes "dispatcher" (`ListTheory`, `ListVisualization`, etc.).
-
-**Fase 3 - Melhorias (Médio prazo)**
-- [ ] **Tipagem Forte:** Melhorar a tipagem do sistema de registro para garantir que todos os componentes necessários (`theory`, `visualization`, etc.) sejam sempre fornecidos na configuração.
-
-## 8. Métricas de Sucesso
-
-- **Tempo para adicionar nova lista:**
-  - **Antes:** ~20-30 minutos (criar 4-5 arquivos, modificar 2-3 arquivos, risco de erro).
-  - **Depois:** ~5-10 minutos (criar 5 arquivos em um único lugar, sem modificar nada existente).
-- **Arquivos que precisam ser modificados para adicionar uma lista:**
-  - **Antes:** 3 (`ListPage.tsx`, `ListVisualization.tsx`, `ListTheory.tsx`, ...).
-  - **Depois:** 1 (`src/app/estruturas/lista/config.ts`).
-- **Linhas de código alteradas (não incluindo o novo código da feature):**
-  - **Antes:** ~15-20 linhas em múltiplos arquivos.
-  - **Depois:** 2 linhas em um único arquivo.
