@@ -54,7 +54,6 @@ A documentação completa está organizada na pasta [`docs/`](docs/):
 
 - **[🔧 Scripts](docs/scripts.md)** - Scripts de automação disponíveis
 - **[🧪 Testes](docs/testing.md)** - Como executar e escrever testes
-- **[🤝 Contribuindo](docs/contributing.md)** - Guia de contribuição
 
 ### 🚀 Deploy & Referência
 
@@ -66,6 +65,7 @@ A documentação completa está organizada na pasta [`docs/`](docs/):
 ## 🛠️ Stack Técnica
 
 ### Frontend
+
 - **Next.js 15** - Framework React com App Router
 - **React 19** - Biblioteca de interface
 - **TypeScript 5.8** - Linguagem tipada
@@ -73,12 +73,14 @@ A documentação completa está organizada na pasta [`docs/`](docs/):
 - **shadcn/ui** - Componentes de interface
 
 ### Backend & Serviços
+
 - **NextAuth.js** - Autenticação
 - **Supabase** - Banco de dados PostgreSQL
 - **Google Gemini AI** - Análise de código por IA
 - **RabbitMQ** - Sistema de filas
 
 ### Testes & Qualidade
+
 - **Vitest** - Framework de testes
 - **Testing Library** - Testes de componentes
 - **ESLint** - Linting de código
@@ -145,6 +147,7 @@ npx tsx scripts/create-type.ts "Pilha" "Pilha com Lista"
 ```
 
 Os scripts criam automaticamente:
+
 - ✅ Estrutura de diretórios
 - ✅ Componentes (teoria, visualização, atividade, desafio)
 - ✅ Arquivos de configuração
@@ -181,18 +184,9 @@ docker-compose logs -f
 ```
 
 **Acessos:**
+
 - Aplicação: http://localhost:3000
 - RabbitMQ Management: http://localhost:15672 (guest/guest)
-
-## 🤝 Como Contribuir
-
-Contribuições são bem-vindas! Por favor:
-
-1. Leia o [Guia de Contribuição](docs/contributing.md)
-2. Fork o projeto
-3. Crie uma branch para sua feature
-4. Faça commit seguindo [Conventional Commits](docs/contributing.md#convenções-de-commit)
-5. Abra um Pull Request
 
 ## 📝 Licença
 

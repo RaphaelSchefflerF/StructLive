@@ -202,7 +202,6 @@ Veja [docs/modules.md](modules.md) e [docs/scripts.md](scripts.md) para detalhes
 ### Para Desenvolver
 1. **[Setup](setup.md)** → Configure seu ambiente
 2. **[Criando Módulos](modules.md)** → Use scripts de automação
-3. **[Contribuindo](contributing.md)** → Padrões e processo
 
 ### Para Deploy
 1. **[Deployment](deployment.md)** → Guia de produção
@@ -212,7 +211,6 @@ Veja [docs/modules.md](modules.md) e [docs/scripts.md](scripts.md) para detalhes
 
 - [FAQ](faq.md) - Perguntas frequentes
 - [Glossário](glossary.md) - Termos técnicos
-- [Auditoria](audit.md) - Relatório de extensibilidade
 
 ---
 
